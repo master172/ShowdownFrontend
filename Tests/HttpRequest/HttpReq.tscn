@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bv6r8gktgngm4"]
+
+[ext_resource type="Script" uid="uid://cmsfo2clclr82" path="res://Tests/HttpRequest/http_req.gd" id="1_pirs8"]
+[ext_resource type="Texture2D" uid="uid://dyemk6ynyy6vb" path="res://icon.svg" id="2_4mch4"]
+
+[node name="HttpReq" type="Node2D"]
+script = ExtResource("1_pirs8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_4mch4")
+centered = false

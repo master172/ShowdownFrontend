@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3 uid="uid://dytbbl8vx8858"]
+
+[ext_resource type="FontFile" uid="uid://b6pbhvdgvsn2" path="res://assets/fonts/Fira_Code/static/FiraCode-Regular.ttf" id="1_q6x5g"]
+[ext_resource type="Script" uid="uid://dpnd68cij3lc5" path="res://Ui/selected_option.gd" id="1_s84e8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xhawy"]
+bg_color = Color(0.109804, 0.156863, 0.14902, 0.619608)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.839216, 0.270588, 0.313726, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
+
+[node name="SelectedOption" type="Control"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_s84e8")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xhawy")
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -11.5
+offset_right = -18.0
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_q6x5g")
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+vertical_alignment = 1

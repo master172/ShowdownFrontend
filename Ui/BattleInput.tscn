@@ -1,0 +1,64 @@
+[gd_scene load_steps=5 format=3 uid="uid://ckl5qb2o0dv3b"]
+
+[ext_resource type="Script" uid="uid://conyjokfib1f3" path="res://Ui/battle_input.gd" id="1_228uh"]
+[ext_resource type="PackedScene" uid="uid://b5jx0hkhk53cq" path="res://Ui/options.tscn" id="1_xhawy"]
+[ext_resource type="PackedScene" uid="uid://dytbbl8vx8858" path="res://Ui/selected_option.tscn" id="2_228uh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_phh85"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.6, 0.00392157, 0, 1)
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+
+[node name="BattleInput" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_228uh")
+default_color = Color(1, 1, 1, 1)
+inactive_color = Color(1, 1, 1, 0.443137)
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -216.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_phh85")
+
+[node name="OptionsContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Options0" parent="Panel/OptionsContainer" instance=ExtResource("1_xhawy")]
+layout_mode = 2
+
+[node name="SelectedOption" parent="Panel/OptionsContainer" instance=ExtResource("2_228uh")]
+layout_mode = 2
+
+[node name="Options1" parent="Panel/OptionsContainer" instance=ExtResource("1_xhawy")]
+layout_mode = 2
