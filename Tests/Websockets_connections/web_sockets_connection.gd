@@ -37,7 +37,7 @@ func handle_parsed_repsonse(msg:Dictionary)->void:
 			opponent_pokemon = msg["state"]["opponent_active"]["species"]
 			emit_signal("update_info_opponent",opponent_pokemon,parser.get_gender(msg,1),parser.get_level(msg,1),parser.get_max_health(msg,1),parser.get_health(msg,1))
 		emit_signal("update_sprites",active_pokemon,opponent_pokemon)
-		
+		#battle_input.update_strings(parser.get_attack_list(msg),parser.get_switch_list(msg))
 		
 
 func _process(_delta):

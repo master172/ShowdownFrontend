@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://cujy13261ccpv"]
+[gd_scene load_steps=13 format=3 uid="uid://cujy13261ccpv"]
 
 [ext_resource type="Script" uid="uid://bfq6ljn535845" path="res://src/main/sprite_manager.gd" id="1_edsbj"]
 [ext_resource type="PackedScene" uid="uid://bjavfnjeecqd8" path="res://Tests/Websockets_connections/web_sockets_connection.tscn" id="1_vk6v0"]
+[ext_resource type="PackedScene" uid="uid://r004dipxc6aj" path="res://src/Helpers/name_verifier.tscn" id="2_bw0dq"]
 [ext_resource type="Texture2D" uid="uid://dyemk6ynyy6vb" path="res://icon.svg" id="2_l0o3j"]
 [ext_resource type="PackedScene" uid="uid://bcawya513aljn" path="res://Ui/info_component.tscn" id="4_5h15r"]
 [ext_resource type="Script" uid="uid://b4aavjevisb26" path="res://src/main/active_sprite.gd" id="4_ynp52"]
@@ -32,6 +33,8 @@ viewport_path = NodePath("OppoentPokemon/OpponentSprite/SubViewport")
 script = ExtResource("1_edsbj")
 active_sprite = NodePath("../ActivePokemon/ActiveSprite")
 opponent_sprite = NodePath("../OppoentPokemon/OpponentSprite")
+
+[node name="NameVerifier" parent="SpriteManager" instance=ExtResource("2_bw0dq")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)

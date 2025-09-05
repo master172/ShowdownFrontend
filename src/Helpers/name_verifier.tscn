@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://r004dipxc6aj"]
+
+[ext_resource type="Script" uid="uid://blqwyjlp812ne" path="res://src/Helpers/name_verifier.gd" id="1_p3xlm"]
+
+[node name="NameVerifier" type="Node"]
+script = ExtResource("1_p3xlm")

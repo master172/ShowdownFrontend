@@ -46,16 +46,27 @@ func active_pokemon_faineted(sw_str:Array):
 func update_strings(att_str:Array,sw_str:Array):
 	attack_strings = att_str
 	switch_strings = sw_str
+	
+	if att_str.size() == 0:
+		current_state = states.MustSwitch
+	if current_state == states.Inactive and att_str.size() > 0:
+		set_active_after_switch()
+		
 	if current_state == states.Attack:
 		option_strings = attack_strings
 		max_selected = attack_strings.size()
 	elif current_state == states.Switch:
 		option_strings = switch_strings
 		max_selected = switch_strings.size()
+	elif current_state == states.MustSwitch:
+		option_strings = switch_strings
+		max_selected = switch_strings.size()
 	current_selected = clamp(current_selected, 0, option_strings.size() - 1)
 	set_options(current_selected)
 	
 func set_options(num:int)->void:
+	if current_state == states.Inactive:
+		return
 	selected_option.update_label(option_strings[num])
 	options_0.update_label(option_strings[(current_selected + max_selected -1 )%max_selected])
 	options_1.update_label(option_strings[(current_selected + 1) % max_selected])
@@ -70,9 +81,13 @@ func swap_states(state:int)->void:
 		option_strings = attack_strings
 		max_selected = attack_strings.size()
 		current_state = states.Attack
-		
+	elif state == states.Inactive:
+		current_state = states.Inactive
 	current_selected = 0
 	set_options(current_selected)
+
+func set_active_after_switch():
+	current_state = states.Attack
 	
 func _input(event: InputEvent) -> void:
 	if current_state == states.Inactive:
@@ -92,9 +107,9 @@ func _input(event: InputEvent) -> void:
 	elif event.is_action_pressed("Yes"):
 		if current_state == states.Switch:
 			emit_signal("request_move","s"+str(current_selected))
-			swap_states(states.Attack)
+			swap_states(states.Inactive)
 		elif current_state == states.Attack:
 			emit_signal("request_move",str(current_selected))
 		elif current_state == states.MustSwitch:
 			emit_signal("request_move","s"+str(current_selected))
-			swap_states(states.Attack)
+			swap_states(states.Inactive)

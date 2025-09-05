@@ -1,5 +1,7 @@
 extends Node
 
+@onready var name_verifier: NameVerifier = $NameVerifier
+
 @export var active_sprite:Sprite3D = null
 @export var opponent_sprite:Sprite3D = null
 
@@ -16,25 +18,39 @@ var opponent_pokemon:String = "":
 			get_sprite(opponent_sprite,val)
 
 func get_sprite(sprite:Sprite3D,val:String)->void:
-	var http_request :HTTPRequest = HTTPRequest.new()
+	var http_request:HTTPRequest = HTTPRequest.new()
+	http_request.request_completed.connect(_on_request_completed.bind(sprite,val))
+	http_request.request_completed.connect(http_request.queue_free.unbind(4))
 	add_child(http_request)
-	http_request.request_completed.connect(_on_request_completed.bind(sprite))
 	var error :Error = http_request.request("https://pokeapi.co/api/v2/pokemon/"+val)
 	if error != OK:
 		push_error("An error occured during the Http request")
 
 
-func _on_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray,sprite:Sprite3D)->void:
+func _on_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray,sprite:Sprite3D,val:String)->void:
 	var json = JSON.new()
 	json.parse(body.get_string_from_utf8())
+	var parse_err = json.parse(body.get_string_from_utf8())
+	
+	
+	if response_code != 200 or parse_err != OK:
+			var mat = name_verifier.find_best_match(val)
+			push_warning("Fuzzy matched:", val, "->", mat)
+			if mat != "":
+				get_sprite(sprite, mat)
+			return
 	
 	var response = json.get_data()
-	
 	var front_url = response["sprites"]["back_default"] if sprite == self.active_sprite else response["sprites"]["front_default"]
-	var download_req :HTTPRequest = HTTPRequest.new()
-	add_child(download_req)
-	download_req.request_completed.connect(_on_download_completed.bind(sprite))
-	var error:Error = download_req.request(front_url)
+	
+	
+	var download_request:HTTPRequest = HTTPRequest.new()
+	
+	download_request.request_completed.connect(_on_download_completed.bind(sprite))
+	download_request.request_completed.connect(download_request.queue_free.unbind(4))
+	
+	add_child(download_request)
+	var error:Error = download_request.request(front_url)
 	
 	if error !=OK:
 		push_error("Something went wrong in downloading the front image")
