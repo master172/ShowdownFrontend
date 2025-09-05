@@ -7,9 +7,12 @@ extends Control
 
 @onready var option_strings:Array = self.attack_strings
 
+signal request_move(move:String)
+
 enum states {
 	Attack,
 	Switch,
+	MustSwitch,
 	Inactive
 }
 
@@ -32,6 +35,14 @@ func _ready() -> void:
 	else:
 		modulate = default_color
 
+func active_pokemon_faineted(sw_str:Array):
+	current_state = states.MustSwitch
+	switch_strings = sw_str
+	option_strings = switch_strings
+	max_selected = switch_strings.size()
+	current_selected = 0
+	set_options(current_selected)
+	
 func update_strings(att_str:Array,sw_str:Array):
 	attack_strings = att_str
 	switch_strings = sw_str
@@ -73,7 +84,16 @@ func _input(event: InputEvent) -> void:
 		current_selected = (current_selected + 1) % max_selected
 		set_options(current_selected)
 	elif event.is_action_pressed("No"):
-		swap_states(states.Switch)
+		if current_state == states.Attack:
+			swap_states(states.Switch)
+		elif current_state == states.Switch:
+			swap_states(states.Attack)
 	elif event.is_action_pressed("Yes"):
 		if current_state == states.Switch:
+			emit_signal("request_move","s"+str(current_selected))
+			swap_states(states.Attack)
+		elif current_state == states.Attack:
+			emit_signal("request_move",str(current_selected))
+		elif current_state == states.MustSwitch:
+			emit_signal("request_move","s"+str(current_selected))
 			swap_states(states.Attack)
