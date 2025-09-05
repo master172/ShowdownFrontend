@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://bcawya513aljn"]
+
+[ext_resource type="Script" uid="uid://e8yxxut5vi31" path="res://Ui/info_component.gd" id="1_7sokm"]
+[ext_resource type="FontFile" uid="uid://cjrtcl6ayccuo" path="res://assets/fonts/Fira_Code/FiraCode-VariableFont_wght.ttf" id="1_wpmk0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5h15r"]
+bg_color = Color(0.6, 0.0678952, 0.0365438, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ynp52"]
+bg_color = Color(0.176851, 0.6, 0.241419, 1)
+
+[node name="InfoComponent" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7sokm")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 341.0
+offset_bottom = 49.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("1_wpmk0")
+text = "Tyrantrum ♀ Lv183"
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_5h15r")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ynp52")
+value = 74.32

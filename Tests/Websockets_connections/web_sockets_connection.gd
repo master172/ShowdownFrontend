@@ -7,6 +7,10 @@ extends Node
 
 var socket = WebSocketPeer.new()
 
+signal update_sprites(active:String,opponent:String)
+signal update_info_active(Name:String,gender:int,level:int,max_hp:int,hp:int)
+signal update_info_opponent(Name:String,gender:int,level:int,max_hp:int,hp:int)
+
 func _ready():
 	
 	var err = socket.connect_to_url(websocket_url)
@@ -22,6 +26,20 @@ func handle_parsed_repsonse(msg:Dictionary)->void:
 		else:
 			battle_input.active_pokemon_faineted(parser.get_switch_list(msg))
 			
+			
+	elif data_type == "turn_end":
+		var active_pokemon:String = ""
+		var opponent_pokemon:String = ""
+		if msg["state"]["active_pokemon"] != null:
+			active_pokemon = msg["state"]["active_pokemon"]["species"]
+			emit_signal("update_info_active",active_pokemon,parser.get_gender(msg),parser.get_level(msg),parser.get_max_health(msg),parser.get_health(msg))
+		if msg["state"]["opponent_active"] != null:
+			opponent_pokemon = msg["state"]["opponent_active"]["species"]
+			emit_signal("update_info_opponent",opponent_pokemon,parser.get_gender(msg,1),parser.get_level(msg,1),parser.get_max_health(msg,1),parser.get_health(msg,1))
+		emit_signal("update_sprites",active_pokemon,opponent_pokemon)
+		
+		
+
 func _process(_delta):
 
 	socket.poll()

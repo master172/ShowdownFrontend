@@ -52,6 +52,7 @@ func update_strings(att_str:Array,sw_str:Array):
 	elif current_state == states.Switch:
 		option_strings = switch_strings
 		max_selected = switch_strings.size()
+	current_selected = clamp(current_selected, 0, option_strings.size() - 1)
 	set_options(current_selected)
 	
 func set_options(num:int)->void:

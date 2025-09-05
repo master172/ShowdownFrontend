@@ -24,6 +24,22 @@ func get_attack_list(msg:Dictionary)->Array:
 	else:
 		return []
 
+func get_health(msg:Dictionary,pokemon:int=0)->int:
+	var poke:String = "active_pokemon" if pokemon == 0 else "opponent_active"
+	return msg["state"][poke]["current_hp"]
+
+func get_max_health(msg:Dictionary,pokemon:int=0)->int:
+	var poke:String = "active_pokemon" if pokemon == 0 else "opponent_active"
+	return msg["state"][poke]["max_hp"]
+	
+func get_gender(msg:Dictionary,pokemon:int=0)->int:
+	var poke:String = "active_pokemon" if pokemon == 0 else "opponent_active"
+	return 1 if msg["state"][poke]["gender"] == "male" else 0
+
+func get_level(msg:Dictionary,pokemon:int=0)->int:
+	var poke:String = "active_pokemon" if pokemon == 0 else "opponent_active"
+	return msg["state"][poke]["level"]
+	
 func get_switch_list(msg:Dictionary)->Array:
 	if msg["type"] == "request":
 		return msg["available_switches"]

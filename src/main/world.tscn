@@ -1,0 +1,108 @@
+[gd_scene load_steps=12 format=3 uid="uid://cujy13261ccpv"]
+
+[ext_resource type="Script" uid="uid://bfq6ljn535845" path="res://src/main/sprite_manager.gd" id="1_edsbj"]
+[ext_resource type="PackedScene" uid="uid://bjavfnjeecqd8" path="res://Tests/Websockets_connections/web_sockets_connection.tscn" id="1_vk6v0"]
+[ext_resource type="Texture2D" uid="uid://dyemk6ynyy6vb" path="res://icon.svg" id="2_l0o3j"]
+[ext_resource type="PackedScene" uid="uid://bcawya513aljn" path="res://Ui/info_component.tscn" id="4_5h15r"]
+[ext_resource type="Script" uid="uid://b4aavjevisb26" path="res://src/main/active_sprite.gd" id="4_ynp52"]
+[ext_resource type="Script" uid="uid://xwpstmo8nsk7" path="res://src/main/opponent_sprite.gd" id="6_2r54a"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vk6v0"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_l0o3j"]
+sky_material = SubResource("ProceduralSkyMaterial_vk6v0")
+
+[sub_resource type="Environment" id="Environment_edsbj"]
+background_mode = 2
+sky = SubResource("Sky_l0o3j")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_bw0dq"]
+viewport_path = NodePath("ActivePokemon/ActiveSprite/SubViewport")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_2r54a"]
+viewport_path = NodePath("OppoentPokemon/OpponentSprite/SubViewport")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="SpriteManager" type="Node" parent="." node_paths=PackedStringArray("active_sprite", "opponent_sprite")]
+script = ExtResource("1_edsbj")
+active_sprite = NodePath("../ActivePokemon/ActiveSprite")
+opponent_sprite = NodePath("../OppoentPokemon/OpponentSprite")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_edsbj")
+
+[node name="web_sockets_connection" parent="." instance=ExtResource("1_vk6v0")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.954167, 0.299274, 0, -0.299274, 0.954167, 0, 10.5865, 16.8749)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+size = Vector3(100, 1, 100)
+
+[node name="ActivePokemon" type="Node3D" parent="."]
+
+[node name="ActiveSprite" type="Sprite3D" parent="ActivePokemon"]
+transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, -4.51726, 6.04805, 1.98003)
+texture_filter = 0
+texture = ExtResource("2_l0o3j")
+script = ExtResource("4_ynp52")
+
+[node name="SubViewport" type="SubViewport" parent="ActivePokemon/ActiveSprite"]
+transparent_bg = true
+size = Vector2i(344, 48)
+
+[node name="InfoComponent" parent="ActivePokemon/ActiveSprite/SubViewport" instance=ExtResource("4_5h15r")]
+
+[node name="Label" parent="ActivePokemon/ActiveSprite/SubViewport/InfoComponent/VBoxContainer" index="0"]
+text = "Megatross ♀ Lv183"
+
+[node name="UiRender" type="Sprite3D" parent="ActivePokemon"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -8.2281, 14.541, 3.91769)
+layers = 3
+billboard = 1
+no_depth_test = true
+texture_filter = 1
+texture = SubResource("ViewportTexture_bw0dq")
+
+[node name="OppoentPokemon" type="Node3D" parent="."]
+
+[node name="OpponentSprite" type="Sprite3D" parent="OppoentPokemon"]
+transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 9.32656, 6.04805, -10.0721)
+texture_filter = 0
+texture = ExtResource("2_l0o3j")
+script = ExtResource("6_2r54a")
+
+[node name="SubViewport" type="SubViewport" parent="OppoentPokemon/OpponentSprite"]
+transparent_bg = true
+size = Vector2i(344, 48)
+
+[node name="InfoComponent" parent="OppoentPokemon/OpponentSprite/SubViewport" instance=ExtResource("4_5h15r")]
+
+[node name="UiRender" type="Sprite3D" parent="OppoentPokemon"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 12.6519, 14.4486, -7.95897)
+layers = 3
+billboard = 1
+no_depth_test = true
+texture_filter = 1
+texture = SubResource("ViewportTexture_2r54a")
+
+[connection signal="update_info_active" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_active"]
+[connection signal="update_info_opponent" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_opponent"]
+[connection signal="update_sprites" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_sprites"]
+
+[editable path="ActivePokemon/ActiveSprite/SubViewport/InfoComponent"]
+[editable path="OppoentPokemon/OpponentSprite/SubViewport/InfoComponent"]

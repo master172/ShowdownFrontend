@@ -4,13 +4,9 @@
 [ext_resource type="Script" uid="uid://dfd8qbdo70dyq" path="res://Tests/Websockets_connections/parser.gd" id="2_5p8n4"]
 [ext_resource type="PackedScene" uid="uid://ckl5qb2o0dv3b" path="res://Ui/BattleInput.tscn" id="3_akr4m"]
 
-[node name="Main" type="Control"]
+[node name="web_sockets_connection" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
 script = ExtResource("1_pa6a7")
 
 [node name="Parser" type="Node" parent="."]
