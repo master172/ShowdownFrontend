@@ -11,6 +11,9 @@ signal update_sprites(active:String,opponent:String)
 signal update_info_active(Name:String,gender:int,level:int,max_hp:int,hp:int)
 signal update_info_opponent(Name:String,gender:int,level:int,max_hp:int,hp:int)
 
+signal battle_won
+signal battle_lost
+
 func _ready():
 	
 	var err = socket.connect_to_url(websocket_url)
@@ -18,16 +21,26 @@ func _ready():
 		print("Unable to connect")
 		set_process(false)
 
+func set_battle_lost():
+	battle_input.set_lost()
 func handle_parsed_repsonse(msg:Dictionary)->void:
 	var data_type = parser.get_data_type(msg)
 	if data_type == "request":
 		if msg["state"]["active_pokemon"]["fainted"] == false:
 			battle_input.update_strings(parser.get_attack_list(msg),parser.get_switch_list(msg))
+			#send_sprite_update_message(msg)
 		else:
 			battle_input.active_pokemon_faineted(parser.get_switch_list(msg))
-			
-			
+			#send_sprite_update_message(msg)
+	elif data_type == "battle_end":
+		var won :bool = parser.parse_battle_end(msg)
+		send_sprite_update_message(msg)
+		emit_signal("battle_won") if won else emit_signal("battle_lost")
+		
 	elif data_type == "turn_end":
+		send_sprite_update_message(msg)
+
+func send_sprite_update_message(msg:Dictionary):
 		var active_pokemon:String = ""
 		var opponent_pokemon:String = ""
 		if msg["state"]["active_pokemon"] != null:

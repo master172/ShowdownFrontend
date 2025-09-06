@@ -13,7 +13,8 @@ enum states {
 	Attack,
 	Switch,
 	MustSwitch,
-	Inactive
+	Inactive,
+	Lost
 }
 
 @export var default_color :Color = Color(0,0,0)
@@ -35,6 +36,9 @@ func _ready() -> void:
 	else:
 		modulate = default_color
 
+func set_lost():
+	current_state = states.Lost
+	
 func active_pokemon_faineted(sw_str:Array):
 	current_state = states.MustSwitch
 	switch_strings = sw_str
@@ -44,6 +48,8 @@ func active_pokemon_faineted(sw_str:Array):
 	set_options(current_selected)
 	
 func update_strings(att_str:Array,sw_str:Array):
+	if current_state == states.Lost:
+		return
 	attack_strings = att_str
 	switch_strings = sw_str
 	
@@ -67,11 +73,16 @@ func update_strings(att_str:Array,sw_str:Array):
 func set_options(num:int)->void:
 	if current_state == states.Inactive:
 		return
+	elif current_state == states.Lost:
+		return
 	selected_option.update_label(option_strings[num])
 	options_0.update_label(option_strings[(current_selected + max_selected -1 )%max_selected])
 	options_1.update_label(option_strings[(current_selected + 1) % max_selected])
 
 func swap_states(state:int)->void:
+	if current_state == states.Lost:
+		return
+		
 	if state == states.Switch:
 		option_strings = switch_strings
 		max_selected = switch_strings.size()
@@ -87,12 +98,16 @@ func swap_states(state:int)->void:
 	set_options(current_selected)
 
 func set_active_after_switch():
+	if current_state == states.Lost:
+		return
 	current_state = states.Attack
 	
 func _input(event: InputEvent) -> void:
 	if current_state == states.Inactive:
 		return
-	
+	elif current_state == states.Lost:
+		return
+		
 	if event.is_action_pressed("ui_left"):
 		current_selected = (current_selected + max_selected -1 )%max_selected
 		set_options(current_selected)

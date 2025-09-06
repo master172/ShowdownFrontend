@@ -1,5 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://cujy13261ccpv"]
+[gd_scene load_steps=19 format=3 uid="uid://cujy13261ccpv"]
 
+[ext_resource type="Script" uid="uid://b70bw2ggvhfny" path="res://src/main/world.gd" id="1_8k0rt"]
 [ext_resource type="Script" uid="uid://bfq6ljn535845" path="res://src/main/sprite_manager.gd" id="1_edsbj"]
 [ext_resource type="PackedScene" uid="uid://bjavfnjeecqd8" path="res://Tests/Websockets_connections/web_sockets_connection.tscn" id="1_vk6v0"]
 [ext_resource type="PackedScene" uid="uid://r004dipxc6aj" path="res://src/Helpers/name_verifier.tscn" id="2_bw0dq"]
@@ -7,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bcawya513aljn" path="res://Ui/info_component.tscn" id="4_5h15r"]
 [ext_resource type="Script" uid="uid://b4aavjevisb26" path="res://src/main/active_sprite.gd" id="4_ynp52"]
 [ext_resource type="Script" uid="uid://xwpstmo8nsk7" path="res://src/main/opponent_sprite.gd" id="6_2r54a"]
+[ext_resource type="PackedScene" uid="uid://bcehvbqx22riw" path="res://Ui/battle_lost.tscn" id="9_ecrqj"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vk6v0"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -27,7 +29,61 @@ viewport_path = NodePath("ActivePokemon/ActiveSprite/SubViewport")
 [sub_resource type="ViewportTexture" id="ViewportTexture_2r54a"]
 viewport_path = NodePath("OppoentPokemon/OpponentSprite/SubViewport")
 
-[node name="Node3D" type="Node3D"]
+[sub_resource type="Animation" id="Animation_pa6lc"]
+resource_name = "Default"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BattleLost:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -648)]
+}
+
+[sub_resource type="Animation" id="Animation_m8525"]
+resource_name = "Lost"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BattleLost:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.233259, 1),
+"update": 0,
+"values": [Vector2(0, -648), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ecrqj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BattleLost:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -648)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_aockp"]
+_data = {
+&"Default": SubResource("Animation_pa6lc"),
+&"Lost": SubResource("Animation_m8525"),
+&"RESET": SubResource("Animation_ecrqj")
+}
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_8k0rt")
 
 [node name="SpriteManager" type="Node" parent="." node_paths=PackedStringArray("active_sprite", "opponent_sprite")]
 script = ExtResource("1_edsbj")
@@ -103,6 +159,17 @@ no_depth_test = true
 texture_filter = 1
 texture = SubResource("ViewportTexture_2r54a")
 
+[node name="BattleLost" parent="." instance=ExtResource("9_ecrqj")]
+offset_top = -648.0
+offset_bottom = -648.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_aockp")
+}
+autoplay = "Default"
+
+[connection signal="battle_lost" from="web_sockets_connection" to="." method="_on_web_sockets_connection_battle_lost"]
 [connection signal="update_info_active" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_active"]
 [connection signal="update_info_opponent" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_opponent"]
 [connection signal="update_sprites" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_sprites"]

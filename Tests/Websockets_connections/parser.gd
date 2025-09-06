@@ -45,6 +45,10 @@ func get_switch_list(msg:Dictionary)->Array:
 		return msg["available_switches"]
 	else:
 		return []
+
+func parse_battle_end(msg:Dictionary)->bool:
+	var won :bool = msg["won"]
+	return won
 	
 func parse_response(msg:String) -> Dictionary:
 	var json = JSON.new()
