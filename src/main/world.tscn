@@ -1,10 +1,8 @@
-[gd_scene load_steps=21 format=3 uid="uid://cujy13261ccpv"]
+[gd_scene load_steps=19 format=3 uid="uid://cujy13261ccpv"]
 
 [ext_resource type="Script" uid="uid://b70bw2ggvhfny" path="res://src/main/world.gd" id="1_8k0rt"]
-[ext_resource type="Script" uid="uid://bfq6ljn535845" path="res://src/main/sprite_manager.gd" id="1_edsbj"]
 [ext_resource type="PackedScene" uid="uid://bjavfnjeecqd8" path="res://Tests/Websockets_connections/web_sockets_connection.tscn" id="1_vk6v0"]
-[ext_resource type="PackedScene" uid="uid://r004dipxc6aj" path="res://src/Helpers/name_verifier.tscn" id="2_bw0dq"]
-[ext_resource type="Texture2D" uid="uid://dyemk6ynyy6vb" path="res://icon.svg" id="2_l0o3j"]
+[ext_resource type="PackedScene" uid="uid://tl7nfb3h82e6" path="res://src/main/sprite_manager.tscn" id="2_8k0rt"]
 [ext_resource type="PackedScene" uid="uid://bcawya513aljn" path="res://Ui/info_component.tscn" id="4_5h15r"]
 [ext_resource type="Script" uid="uid://b4aavjevisb26" path="res://src/main/active_sprite.gd" id="4_ynp52"]
 [ext_resource type="Script" uid="uid://xwpstmo8nsk7" path="res://src/main/opponent_sprite.gd" id="6_2r54a"]
@@ -148,12 +146,9 @@ _data = {
 [node name="World" type="Node3D"]
 script = ExtResource("1_8k0rt")
 
-[node name="SpriteManager" type="Node" parent="." node_paths=PackedStringArray("active_sprite", "opponent_sprite")]
-script = ExtResource("1_edsbj")
+[node name="SpriteManager" parent="." node_paths=PackedStringArray("active_sprite", "opponent_sprite") instance=ExtResource("2_8k0rt")]
 active_sprite = NodePath("../ActivePokemon/ActiveSprite")
 opponent_sprite = NodePath("../OppoentPokemon/OpponentSprite")
-
-[node name="NameVerifier" parent="SpriteManager" instance=ExtResource("2_bw0dq")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
@@ -180,7 +175,6 @@ size = Vector3(100, 1, 100)
 [node name="ActiveSprite" type="Sprite3D" parent="ActivePokemon"]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, -4.51726, 6.04805, 1.98003)
 texture_filter = 0
-texture = ExtResource("2_l0o3j")
 script = ExtResource("4_ynp52")
 
 [node name="SubViewport" type="SubViewport" parent="ActivePokemon/ActiveSprite"]
@@ -188,9 +182,6 @@ transparent_bg = true
 size = Vector2i(344, 48)
 
 [node name="InfoComponent" parent="ActivePokemon/ActiveSprite/SubViewport" instance=ExtResource("4_5h15r")]
-
-[node name="Label" parent="ActivePokemon/ActiveSprite/SubViewport/InfoComponent/VBoxContainer" index="0"]
-text = "Megatross ♀ Lv183"
 
 [node name="UiRender" type="Sprite3D" parent="ActivePokemon"]
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -8.2281, 14.541, 3.91769)
@@ -205,7 +196,6 @@ texture = SubResource("ViewportTexture_bw0dq")
 [node name="OpponentSprite" type="Sprite3D" parent="OppoentPokemon"]
 transform = Transform3D(15, 0, 0, 0, 15, 0, 0, 0, 15, 9.32656, 6.04805, -10.0721)
 texture_filter = 0
-texture = ExtResource("2_l0o3j")
 script = ExtResource("6_2r54a")
 
 [node name="SubViewport" type="SubViewport" parent="OppoentPokemon/OpponentSprite"]
@@ -245,6 +235,3 @@ autoplay = "Default"
 [connection signal="update_info_active" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_active"]
 [connection signal="update_info_opponent" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_opponent"]
 [connection signal="update_sprites" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_sprites"]
-
-[editable path="ActivePokemon/ActiveSprite/SubViewport/InfoComponent"]
-[editable path="OppoentPokemon/OpponentSprite/SubViewport/InfoComponent"]

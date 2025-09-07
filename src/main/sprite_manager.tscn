@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://tl7nfb3h82e6"]
+
+[ext_resource type="Script" uid="uid://bfq6ljn535845" path="res://src/main/sprite_manager.gd" id="1_epyf1"]
+[ext_resource type="PackedScene" uid="uid://r004dipxc6aj" path="res://src/Helpers/name_verifier.tscn" id="2_268kk"]
+
+[node name="SpriteManager" type="Node"]
+script = ExtResource("1_epyf1")
+
+[node name="NameVerifier" parent="." instance=ExtResource("2_268kk")]

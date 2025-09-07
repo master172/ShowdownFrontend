@@ -95,6 +95,8 @@ func swap_states(state:int)->void:
 		return
 		
 	if state == states.Switch:
+		if switch_strings.size() == 0:
+			return
 		option_strings = switch_strings
 		max_selected = switch_strings.size()
 		current_state = states.Switch

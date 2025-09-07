@@ -10,65 +10,93 @@ var active_pokemon:String = "" :
 		if val != active_pokemon:
 			active_pokemon = val
 			if val != "":
-				get_sprite(active_sprite,val)
+				get_sprite(active_sprite,val,true)
 		
 var opponent_pokemon:String = "":
 	set(val):
 		if val != opponent_pokemon:
 			opponent_pokemon = val
 			if val != "":
-				get_sprite(opponent_sprite,val)
+				get_sprite(opponent_sprite,val,false)
 
-func get_sprite(sprite:Sprite3D,val:String)->void:
+func get_sprite(sprite:Sprite3D,val:String,back:bool=false)->void:
 	var http_request:HTTPRequest = HTTPRequest.new()
+	#var match_name = name_verifier.find_best_match(val)
+	var showdown_name = val.to_lower().replace(" ","-").replace("_","-")
+	var url = "https://play.pokemonshowdown.com/sprites/gen5/"+showdown_name +".png" if back == false else "https://play.pokemonshowdown.com/sprites/gen5-back/"+showdown_name +".png"
 	http_request.request_completed.connect(_on_request_completed.bind(sprite,val))
 	http_request.request_completed.connect(http_request.queue_free.unbind(4))
 	add_child(http_request)
-	var error :Error = http_request.request("https://pokeapi.co/api/v2/pokemon/"+val)
+	var error :Error = http_request.request(url)
 	if error != OK:
 		push_error("An error occured during the Http request")
 
-
 func _on_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray,sprite:Sprite3D,val:String)->void:
-	var json = JSON.new()
-	json.parse(body.get_string_from_utf8())
-	var parse_err = json.parse(body.get_string_from_utf8())
-	
-	
-	if response_code != 200 or parse_err != OK:
-			var mat = name_verifier.find_best_match(val)
-			push_warning("Fuzzy matched:", val, "->", mat)
-			if mat != "":
-				get_sprite(sprite, mat)
-			return
-	
-	var response = json.get_data()
-	var front_url = response["sprites"]["back_default"] if sprite == self.active_sprite else response["sprites"]["front_default"]
-	
-	
-	var download_request:HTTPRequest = HTTPRequest.new()
-	
-	download_request.request_completed.connect(_on_download_completed.bind(sprite))
-	download_request.request_completed.connect(download_request.queue_free.unbind(4))
-	
-	add_child(download_request)
-	var error:Error = download_request.request(front_url)
-	
-	if error !=OK:
-		push_error("Something went wrong in downloading the front image")
-	
-	
-
-func _on_download_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray,sprite:Sprite3D)->void:
 	if response_code == 200:
 		var Img = Image.new()
 		var error = Img.load_png_from_buffer(body)
 		if error != OK:
 			push_error("failed to load png from buffer")
-
 		else:
 			var tex:Texture = ImageTexture.create_from_image(Img)
 			sprite.texture = tex
+	else:
+		var mat = name_verifier.find_best_match(val)
+		push_warning("Fuzzy matched:", val, "->", mat)
+		if mat != "":
+			get_sprite(sprite, mat)
+		return
+		
+#func get_sprite(sprite:Sprite3D,val:String)->void:
+	#var http_request:HTTPRequest = HTTPRequest.new()
+	#http_request.request_completed.connect(_on_request_completed.bind(sprite,val))
+	#http_request.request_completed.connect(http_request.queue_free.unbind(4))
+	#add_child(http_request)
+	#var error :Error = http_request.request("https://pokeapi.co/api/v2/pokemon/"+val)
+	#if error != OK:
+		#push_error("An error occured during the Http request")
+#
+#
+#func _on_request_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray,sprite:Sprite3D,val:String)->void:
+	#var json = JSON.new()
+	#json.parse(body.get_string_from_utf8())
+	#var parse_err = json.parse(body.get_string_from_utf8())
+	#
+	#
+	#if response_code != 200 or parse_err != OK:
+			#var mat = name_verifier.find_best_match(val)
+			#push_warning("Fuzzy matched:", val, "->", mat)
+			#if mat != "":
+				#get_sprite(sprite, mat)
+			#return
+	#
+	#var response = json.get_data()
+	#var front_url = response["sprites"]["back_default"] if sprite == self.active_sprite else response["sprites"]["front_default"]
+	#
+	#
+	#var download_request:HTTPRequest = HTTPRequest.new()
+	#
+	#download_request.request_completed.connect(_on_download_completed.bind(sprite))
+	#download_request.request_completed.connect(download_request.queue_free.unbind(4))
+	#
+	#add_child(download_request)
+	#var error:Error = download_request.request(front_url)
+	#
+	#if error !=OK:
+		#push_error("Something went wrong in downloading the front image")
+	#
+	#
+#
+#func _on_download_completed(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray,sprite:Sprite3D)->void:
+	#if response_code == 200:
+		#var Img = Image.new()
+		#var error = Img.load_png_from_buffer(body)
+		#if error != OK:
+			#push_error("failed to load png from buffer")
+#
+		#else:
+			#var tex:Texture = ImageTexture.create_from_image(Img)
+			#sprite.texture = tex
 
 
 
