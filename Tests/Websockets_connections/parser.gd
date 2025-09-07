@@ -63,3 +63,6 @@ func parse_response(msg:String) -> Dictionary:
 	else:
 		var data_received = json.data
 		return data_received
+
+func parse_register(Name:String)->String:
+	return JSON.stringify({"type": "register_request", "name": Name})

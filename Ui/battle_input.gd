@@ -20,7 +20,7 @@ enum states {
 @export var default_color :Color = Color(0,0,0)
 @export var inactive_color :Color = Color(0,0,0)
 
-var current_state :int = states.Attack
+var current_state :int = states.Inactive
 
 var max_selected:int = 0
 var current_selected:int = 0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cujy13261ccpv"]
+[gd_scene load_steps=20 format=3 uid="uid://cujy13261ccpv"]
 
 [ext_resource type="Script" uid="uid://b70bw2ggvhfny" path="res://src/main/world.gd" id="1_8k0rt"]
 [ext_resource type="PackedScene" uid="uid://bjavfnjeecqd8" path="res://Tests/Websockets_connections/web_sockets_connection.tscn" id="1_vk6v0"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://b4aavjevisb26" path="res://src/main/active_sprite.gd" id="4_ynp52"]
 [ext_resource type="Script" uid="uid://xwpstmo8nsk7" path="res://src/main/opponent_sprite.gd" id="6_2r54a"]
 [ext_resource type="PackedScene" uid="uid://bcehvbqx22riw" path="res://Ui/battle_lost.tscn" id="9_ecrqj"]
+[ext_resource type="PackedScene" uid="uid://xotyaf6yyj4u" path="res://Ui/battle_register.tscn" id="9_m8525"]
 [ext_resource type="PackedScene" uid="uid://b3ofhv57qea6a" path="res://Ui/battle_won.tscn" id="10_m8525"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vk6v0"]
@@ -226,12 +227,17 @@ libraries = {
 }
 autoplay = "Default"
 
+[node name="BattleRegister" parent="." instance=ExtResource("9_m8525")]
+
 [connection signal="battle_lost" from="web_sockets_connection" to="." method="_on_web_sockets_connection_battle_lost"]
 [connection signal="battle_position" from="web_sockets_connection" to="." method="_on_web_sockets_connection_battle_position"]
 [connection signal="battle_won" from="web_sockets_connection" to="." method="_on_web_sockets_connection_battle_won"]
+[connection signal="registration_failed" from="web_sockets_connection" to="BattleRegister" method="name_taken"]
+[connection signal="registration_sucessful" from="web_sockets_connection" to="BattleRegister" method="registered"]
 [connection signal="reset" from="web_sockets_connection" to="." method="_on_web_sockets_connection_reset"]
 [connection signal="reset" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_reset"]
 [connection signal="tournament_won" from="web_sockets_connection" to="." method="_on_web_sockets_connection_tournament_won"]
 [connection signal="update_info_active" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_active"]
 [connection signal="update_info_opponent" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_opponent"]
 [connection signal="update_sprites" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_sprites"]
+[connection signal="name_chosen" from="BattleRegister" to="web_sockets_connection" method="_on_battle_register_name_chosen"]

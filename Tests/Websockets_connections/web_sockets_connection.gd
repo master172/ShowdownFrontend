@@ -18,6 +18,8 @@ signal battle_position(pos:int)
 signal tournament_won
 
 signal reset
+signal registration_failed
+signal registration_sucessful
 
 func _ready():
 	
@@ -41,6 +43,12 @@ func handle_parsed_repsonse(msg:Dictionary)->void:
 			
 	elif data_type == "battle_pre_start":
 		reset_pre_battle()
+	
+	elif data_type == "name_taken":
+		emit_signal("registration_failed")
+	
+	elif data_type == "registration_sucessful":
+		emit_signal("registration_sucessful")
 		
 	elif data_type == "battle_end":
 		var won :bool = parser.parse_battle_end(msg)
@@ -102,3 +110,7 @@ func _process(_delta):
 
 func _on_battle_input_request_move(move: String) -> void:
 	socket.send_text(parser.parse_input(move))
+
+
+func _on_battle_register_name_chosen(Name: String) -> void:
+	socket.send_text(parser.parse_register(Name))
