@@ -9,3 +9,7 @@ func update_info(Name:String,gender:int,level:int,max:int,value:int):
 	var tween = get_tree().create_tween()
 	tween.tween_property(progress_bar,"value",value,0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
   
+func reset():
+	label.text = ""
+	progress_bar.max_value = 0
+	progress_bar.min_value = 0

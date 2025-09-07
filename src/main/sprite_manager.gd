@@ -9,13 +9,15 @@ var active_pokemon:String = "" :
 	set(val):
 		if val != active_pokemon:
 			active_pokemon = val
-			get_sprite(active_sprite,val)
+			if val != "":
+				get_sprite(active_sprite,val)
 		
 var opponent_pokemon:String = "":
 	set(val):
 		if val != opponent_pokemon:
 			opponent_pokemon = val
-			get_sprite(opponent_sprite,val)
+			if val != "":
+				get_sprite(opponent_sprite,val)
 
 func get_sprite(sprite:Sprite3D,val:String)->void:
 	var http_request:HTTPRequest = HTTPRequest.new()
@@ -82,3 +84,10 @@ func _on_web_sockets_connection_update_info_active(Name: String, gender: int, le
 
 func _on_web_sockets_connection_update_info_opponent(Name: String, gender: int, level: int, max_hp: int, hp: int) -> void:
 	opponent_sprite.info_component.update_info(Name,gender,level,max_hp,hp)
+
+
+func _on_web_sockets_connection_reset() -> void:
+	active_sprite.reset()
+	opponent_sprite.reset()
+	active_pokemon = ""
+	opponent_pokemon = ""

@@ -47,6 +47,7 @@ func levenshtein(s1: String, s2: String) -> int:
 	return previous_row[-1]
 
 func find_best_match(input_str: String, string_list: Array = pokemon_names, threshold: float = 0.8) -> String:
+	print_debug("name verifier called")
 	var best_match: String = ""
 	var max_similarity: float = 0.0
 	
@@ -59,6 +60,8 @@ func find_best_match(input_str: String, string_list: Array = pokemon_names, thre
 			best_match = s
 	
 	if max_similarity >= threshold:
+		print_debug("returning best match ",best_match)
 		return best_match
 	else:
+		print_debug("no match found")
 		return ""

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cujy13261ccpv"]
+[gd_scene load_steps=21 format=3 uid="uid://cujy13261ccpv"]
 
 [ext_resource type="Script" uid="uid://b70bw2ggvhfny" path="res://src/main/world.gd" id="1_8k0rt"]
 [ext_resource type="Script" uid="uid://bfq6ljn535845" path="res://src/main/sprite_manager.gd" id="1_edsbj"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://b4aavjevisb26" path="res://src/main/active_sprite.gd" id="4_ynp52"]
 [ext_resource type="Script" uid="uid://xwpstmo8nsk7" path="res://src/main/opponent_sprite.gd" id="6_2r54a"]
 [ext_resource type="PackedScene" uid="uid://bcehvbqx22riw" path="res://Ui/battle_lost.tscn" id="9_ecrqj"]
+[ext_resource type="PackedScene" uid="uid://b3ofhv57qea6a" path="res://Ui/battle_won.tscn" id="10_m8525"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vk6v0"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -44,6 +45,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(0, -648)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BattleWon:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -648)]
+}
 
 [sub_resource type="Animation" id="Animation_m8525"]
 resource_name = "Lost"
@@ -74,12 +87,62 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector2(0, -648)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BattleWon:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -648)]
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BattleWon:position:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BattleWon:position:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(-648, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_aockp"]
+resource_name = "Won"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BattleWon:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(0.125, 1),
+"update": 0,
+"values": [Vector2(0, -648), Vector2(0, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_aockp"]
 _data = {
 &"Default": SubResource("Animation_pa6lc"),
 &"Lost": SubResource("Animation_m8525"),
-&"RESET": SubResource("Animation_ecrqj")
+&"RESET": SubResource("Animation_ecrqj"),
+&"Won": SubResource("Animation_aockp")
 }
 
 [node name="World" type="Node3D"]
@@ -163,6 +226,10 @@ texture = SubResource("ViewportTexture_2r54a")
 offset_top = -648.0
 offset_bottom = -648.0
 
+[node name="BattleWon" parent="." instance=ExtResource("10_m8525")]
+offset_top = -648.0
+offset_bottom = -648.0
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_aockp")
@@ -170,6 +237,9 @@ libraries = {
 autoplay = "Default"
 
 [connection signal="battle_lost" from="web_sockets_connection" to="." method="_on_web_sockets_connection_battle_lost"]
+[connection signal="battle_won" from="web_sockets_connection" to="." method="_on_web_sockets_connection_battle_won"]
+[connection signal="reset" from="web_sockets_connection" to="." method="_on_web_sockets_connection_reset"]
+[connection signal="reset" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_reset"]
 [connection signal="update_info_active" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_active"]
 [connection signal="update_info_opponent" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_opponent"]
 [connection signal="update_sprites" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_sprites"]

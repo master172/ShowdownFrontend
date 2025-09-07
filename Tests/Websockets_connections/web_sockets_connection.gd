@@ -14,6 +14,8 @@ signal update_info_opponent(Name:String,gender:int,level:int,max_hp:int,hp:int)
 signal battle_won
 signal battle_lost
 
+signal reset
+
 func _ready():
 	
 	var err = socket.connect_to_url(websocket_url)
@@ -23,6 +25,7 @@ func _ready():
 
 func set_battle_lost():
 	battle_input.set_lost()
+	
 func handle_parsed_repsonse(msg:Dictionary)->void:
 	var data_type = parser.get_data_type(msg)
 	if data_type == "request":
@@ -32,6 +35,10 @@ func handle_parsed_repsonse(msg:Dictionary)->void:
 		else:
 			battle_input.active_pokemon_faineted(parser.get_switch_list(msg))
 			#send_sprite_update_message(msg)
+			
+	elif data_type == "battle_pre_start":
+		reset_pre_battle()
+		
 	elif data_type == "battle_end":
 		var won :bool = parser.parse_battle_end(msg)
 		send_sprite_update_message(msg)
@@ -53,6 +60,11 @@ func send_sprite_update_message(msg:Dictionary):
 		#battle_input.update_strings(parser.get_attack_list(msg),parser.get_switch_list(msg))
 		
 
+func reset_pre_battle():
+	print_debug("resetting after battle")
+	battle_input.reset()
+	emit_signal("reset")
+	
 func _process(_delta):
 
 	socket.poll()

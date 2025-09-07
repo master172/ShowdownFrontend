@@ -31,11 +31,22 @@ var switch_strings:Array = []
 
 func _ready() -> void:
 	#set_options(current_selected)
+	modulate_active()
+	
+func modulate_active():
 	if current_state == states.Inactive:
 		modulate = inactive_color
 	else:
 		modulate = default_color
 
+func reset():
+	current_state = states.Inactive
+	attack_strings = []
+	switch_strings = []
+	option_strings = []
+	max_selected = 0
+	modulate_active()
+	
 func set_lost():
 	current_state = states.Lost
 	
