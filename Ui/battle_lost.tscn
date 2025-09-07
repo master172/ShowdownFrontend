@@ -42,6 +42,14 @@ text = "You Lost the battle"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Info" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_ig5df")
+theme_override_font_sizes/font_size = 32
+text = "You finished at position: "
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4

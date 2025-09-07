@@ -14,6 +14,9 @@ signal update_info_opponent(Name:String,gender:int,level:int,max_hp:int,hp:int)
 signal battle_won
 signal battle_lost
 
+signal battle_position(pos:int)
+signal tournament_won
+
 signal reset
 
 func _ready():
@@ -46,7 +49,13 @@ func handle_parsed_repsonse(msg:Dictionary)->void:
 		
 	elif data_type == "turn_end":
 		send_sprite_update_message(msg)
-
+	
+	elif data_type == "battle_position":
+		emit_signal("battle_position",parser.get_battle_pos(msg))
+		
+	elif data_type == "tournament_won":
+		emit_signal("tournament_won")
+		
 func send_sprite_update_message(msg:Dictionary):
 		var active_pokemon:String = ""
 		var opponent_pokemon:String = ""

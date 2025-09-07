@@ -237,9 +237,11 @@ libraries = {
 autoplay = "Default"
 
 [connection signal="battle_lost" from="web_sockets_connection" to="." method="_on_web_sockets_connection_battle_lost"]
+[connection signal="battle_position" from="web_sockets_connection" to="." method="_on_web_sockets_connection_battle_position"]
 [connection signal="battle_won" from="web_sockets_connection" to="." method="_on_web_sockets_connection_battle_won"]
 [connection signal="reset" from="web_sockets_connection" to="." method="_on_web_sockets_connection_reset"]
 [connection signal="reset" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_reset"]
+[connection signal="tournament_won" from="web_sockets_connection" to="." method="_on_web_sockets_connection_tournament_won"]
 [connection signal="update_info_active" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_active"]
 [connection signal="update_info_opponent" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_info_opponent"]
 [connection signal="update_sprites" from="web_sockets_connection" to="SpriteManager" method="_on_web_sockets_connection_update_sprites"]

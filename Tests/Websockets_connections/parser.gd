@@ -39,6 +39,9 @@ func get_gender(msg:Dictionary,pokemon:int=0)->int:
 func get_level(msg:Dictionary,pokemon:int=0)->int:
 	var poke:String = "active_pokemon" if pokemon == 0 else "opponent_active"
 	return msg["state"][poke]["level"]
+
+func get_battle_pos(msg:Dictionary)->int:
+	return msg["pos"]
 	
 func get_switch_list(msg:Dictionary)->Array:
 	if msg["type"] == "request":
